@@ -1,0 +1,7 @@
+# Workspace
+.vscode
+.history
+
+# Development
+node_modules
+dist

@@ -4,6 +4,7 @@ import fse from "fs-extra";
 import { App } from "./src/Classes/App";
 import { FileUploadMiddleware } from "./src/Middlewares/FileUploadMiddleware";
 import { paths } from "./src/other/config";
+import { mainRouter } from "./src/routes/router";
 
 fse.ensureDir(paths.tmp);
 
@@ -18,7 +19,7 @@ const app = new App(
       tempFileDir: paths.tmp,
     }),
   ],
-  []
+  [mainRouter]
 );
 
 app.start();

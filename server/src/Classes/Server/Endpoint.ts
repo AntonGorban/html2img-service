@@ -3,17 +3,12 @@ import { ApiMethods } from "../../../types/enums";
 import { Controller } from "./Controller";
 import { Middleware } from "./Middleware";
 
-export class Endpoint<
-  P = Server.ParamsType,
-  Q = Server.QueryType,
-  B = Server.BodyType,
-  R = any
-> {
+export class Endpoint {
   constructor(
     private readonly _method: ApiMethods,
     private readonly _route: string,
     private readonly _beforeMiddlewares: ReadonlyArray<Middleware>,
-    private readonly _controller: Controller<P, Q, B, R>,
+    private readonly _controller: Controller<any, any, any>,
     private readonly _afterMiddlewares?: ReadonlyArray<Middleware>
   ) {}
 

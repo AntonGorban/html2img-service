@@ -1,13 +1,15 @@
+import { JSONSchemaType } from "ajv";
+
 import { Server } from "../../types";
 import { ApiError } from "../Classes/Error/ApiError";
 import { Controller } from "../Classes/Server/Controller";
+import { validation } from "../Classes/Validation/Validation";
 
 export class TestController extends Controller<Params, Query, Body, Response> {
   _controller: ControllerType = async (req, res, next) => {
     try {
-      const { test } = req.query;
+      const { test } = this._queryValidator.validate(req.query);
 
-      return next(ApiError.notFound());
       return res
         .status(202)
         .json({
@@ -19,13 +21,29 @@ export class TestController extends Controller<Params, Query, Body, Response> {
       return next(error);
     }
   };
+
+  private readonly _queryValidator = validation.generateValidator(queryVS);
 }
+
+/* ------------------------------- Validation ------------------------------- */
+
+const queryVS: JSONSchemaType<Query> = {
+  type: "object",
+
+  properties: {
+    test: { type: "string" },
+  },
+
+  required: ["test"],
+};
+
+/* ------------------------------ / Validation ------------------------------ */
 
 /* ---------------------------------- Types --------------------------------- */
 
 interface Params {}
 interface Query {
-  readonly test?: string;
+  readonly test: string;
 }
 interface Body {}
 interface Response {

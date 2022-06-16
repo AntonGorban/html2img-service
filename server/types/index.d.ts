@@ -16,12 +16,7 @@ export namespace Server {
     readonly [key: string]: any;
   }
 
-  type ControllerType<
-    P extends ParamsType = ParamsType,
-    Q extends QueryType = QueryType,
-    B extends BodyType = BodyType,
-    R = any
-  > = (
+  type ControllerType<P = ParamsType, Q = QueryType, B = BodyType, R = any> = (
     request: Express.Request<
       ObjectWithGivenValues<P, ParamsType[0] | undefined>,
       R,

@@ -8,7 +8,7 @@ export class Router {
 
   constructor(
     private readonly _route: string,
-    private readonly _endpoints: ReadonlyArray<Endpoint<any, any, any, any>>
+    private readonly _endpoints: ReadonlyArray<Endpoint>
   ) {
     this._router = Express();
 

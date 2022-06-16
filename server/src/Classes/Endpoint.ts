@@ -4,10 +4,10 @@ import { Controller } from "./Controller";
 import { Middleware } from "./Middleware";
 
 export class Endpoint<
-  P extends Server.ParamsType,
-  Q extends Server.QueryType,
-  B extends Server.BodyType,
-  R extends any
+  P = Server.ParamsType,
+  Q = Server.QueryType,
+  B = Server.BodyType,
+  R = any
 > {
   constructor(
     private readonly _method: ApiMethods,

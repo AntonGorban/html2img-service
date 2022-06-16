@@ -1,10 +1,10 @@
 import { Server } from "../../types";
 
 export abstract class Controller<
-  P extends Server.ParamsType,
-  Q extends Server.QueryType,
-  B extends Server.BodyType,
-  R extends any
+  P = Server.ParamsType,
+  Q = Server.QueryType,
+  B = Server.BodyType,
+  R = any
 > {
   protected abstract readonly _controller: Server.ControllerType<P, Q, B, R>;
 

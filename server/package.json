@@ -5,7 +5,13 @@
   "main": "dist/index.js",
   "types": "dist/types/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node .",
+    "start:dev": "nodemon dist/index.js",
+    "build:dev": "tsc --watch --preserveWatchOutput",
+    "dev": "concurrently \"npm:build:dev\" \"npm:start:dev\"",
+    "build:prod": "tsc --project tsconfig.json",
+    "clean:prod": "rm -r build",
+    "build": "concurrently \"npm run clean:prod\" \"npm run build:prod\""
   },
   "keywords": [],
   "author": "Anton Gorban <antogor.work@gmail.com>",
@@ -20,6 +26,7 @@
     "@types/express": "^4.17.13",
     "@types/express-fileupload": "^1.2.2",
     "@types/fs-extra": "^9.0.13",
-    "@types/node": "^17.0.23"
+    "@types/node": "^17.0.23",
+    "nodemon": "^2.0.16"
   }
 }

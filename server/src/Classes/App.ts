@@ -24,7 +24,7 @@ export class App {
   }
 
   private useRouters(routers: ReadonlyArray<Router>) {
-    routers.forEach((router) => this._app.use(router.router));
+    routers.forEach((router) => this._app.use(router.route, router.router));
   }
 
   public start() {

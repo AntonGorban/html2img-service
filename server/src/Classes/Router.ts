@@ -5,16 +5,21 @@ import { Endpoint } from "./Endpoint";
 
 export class Router {
   private readonly _router: Server.ExpressRouterType;
+  private readonly _route: string;
 
-  constructor(
-    private readonly _route: string,
-    private readonly _endpoints: ReadonlyArray<Endpoint>
-  ) {
+  constructor(route: string, endpoints: ReadonlyArray<Endpoint>) {
+    this._route = route;
     this._router = Express();
 
-    this._router.use(this._route);
+    this.useEndpoints(endpoints);
+  }
 
-    this._endpoints.forEach((endpoint) => endpoint.use(this._router));
+  private useEndpoints(endpoints: ReadonlyArray<Endpoint>) {
+    endpoints.forEach((endpoint) => endpoint.use(this._router));
+  }
+
+  get route() {
+    return this._route;
   }
 
   get router() {

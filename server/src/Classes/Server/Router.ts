@@ -1,6 +1,6 @@
 import Express from "express";
 
-import { Server } from "../../types";
+import { Server } from "../../../types";
 import { Endpoint } from "./Endpoint";
 
 export class Router {

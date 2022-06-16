@@ -1,7 +1,7 @@
 require("dotenv").config();
 import fse from "fs-extra";
 
-import { App } from "./src/Classes/App";
+import { App } from "./src/Classes/Server/App";
 import { FileUploadMiddleware } from "./src/Middlewares/FileUploadMiddleware";
 import { paths } from "./src/other/config";
 import { mainRouter } from "./src/routes/router";

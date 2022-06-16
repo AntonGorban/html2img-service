@@ -1,5 +1,5 @@
-import { Server } from "../../types";
-import { ApiMethods } from "../../types/enums";
+import { Server } from "../../../types";
+import { ApiMethods } from "../../../types/enums";
 import { Controller } from "./Controller";
 import { Middleware } from "./Middleware";
 

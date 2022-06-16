@@ -1,4 +1,4 @@
-import { Server } from "../../types";
+import { Server } from "../../../types";
 import { Controller } from "./Controller";
 
 export abstract class Middleware extends Controller<

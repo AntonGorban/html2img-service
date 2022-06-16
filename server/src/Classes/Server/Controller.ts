@@ -1,4 +1,4 @@
-import { Server } from "../../types";
+import { Server } from "../../../types";
 
 export abstract class Controller<
   P = Server.ParamsType,

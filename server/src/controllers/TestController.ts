@@ -1,5 +1,5 @@
 import { Server } from "../../types";
-import { Controller } from "../Classes/Controller";
+import { Controller } from "../Classes/Server/Controller";
 
 export class TestController extends Controller<Params, Query, Body, Response> {
   _controller: ControllerType = async (req, res) => {

@@ -1,7 +1,7 @@
 import fileUpload from "express-fileupload";
 
 import { Server } from "../../types";
-import { Middleware } from "../Classes/Middleware";
+import { Middleware } from "../Classes/Server/Middleware";
 
 export class FileUploadMiddleware extends Middleware {
   constructor(private readonly _config: fileUpload.Options) {

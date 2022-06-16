@@ -4,11 +4,10 @@ import lo from "lodash";
 import { ValidationError } from "../Error/ValidationError";
 
 export class Validator<T extends {}> {
-  private readonly _validator: ValidateFunction;
-
-  constructor(validator: ValidateFunction<T>) {
-    this._validator = validator;
-  }
+  constructor(
+    private readonly _validator: ValidateFunction,
+    private readonly _dataVar?: string
+  ) {}
 
   public readonly validate: (rawData: unknown) => T = (rawData) => {
     const data = lo.cloneDeep(rawData);
@@ -17,7 +16,7 @@ export class Validator<T extends {}> {
 
     if (!valid) {
       if (!this._validator.errors) throw new Error("что-то пошло не так");
-      throw new ValidationError(this._validator.errors[0]);
+      throw new ValidationError(this._validator.errors, this._dataVar);
     }
 
     return data as T;

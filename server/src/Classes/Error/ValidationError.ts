@@ -1,12 +1,16 @@
 import { ErrorObject } from "ajv";
 
-export class ValidationError extends Error {
-  public readonly info: ErrorObject;
+import { validation } from "../Validation/Validation";
 
-  constructor(error: ErrorObject) {
-    super(error.message || "что-то пошло не так");
+export class ValidationError extends Error {
+  public readonly info: ReadonlyArray<ErrorObject>;
+
+  constructor(errors: Array<ErrorObject>, dataVar?: string) {
+    super(
+      validation.getErrorMessage([errors[0]], dataVar) || "что-то пошло не так"
+    );
 
     this.name = "ValidationError";
-    this.info = error;
+    this.info = errors;
   }
 }

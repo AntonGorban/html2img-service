@@ -1,4 +1,4 @@
-import Ajv, { JSONSchemaType } from "ajv";
+import Ajv, { ErrorObject, JSONSchemaType } from "ajv";
 import ajvErrors from "ajv-errors";
 import ajvFormats from "ajv-formats";
 
@@ -35,10 +35,15 @@ class Validation {
   };
 
   public readonly generateValidator: <T>(
-    schema: JSONSchemaType<T>
-  ) => Validator<T> = (schema) => {
-    return new Validator(this._ajv.compile(schema));
+    schema: JSONSchemaType<T>,
+    dataVar?: string
+  ) => Validator<T> = (schema, dataVar) => {
+    return new Validator(this._ajv.compile(schema), dataVar);
   };
+
+  public getErrorMessage(errors: Array<ErrorObject>, dataVar?: string) {
+    return this._ajv.errorsText(errors, { dataVar });
+  }
 }
 
 export const validation = new Validation();

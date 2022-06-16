@@ -9,14 +9,17 @@ export class App {
 
   constructor(
     port: number,
-    middlewares: ReadonlyArray<Middleware>,
-    routers: ReadonlyArray<Router>
+    beforeMiddlewares: ReadonlyArray<Middleware>,
+    routers: ReadonlyArray<Router>,
+    afterMiddlewares?: ReadonlyArray<Middleware>
   ) {
     this._app = express();
+    this._app.use(express.json());
     this._port = port;
 
-    this.useMiddlewares(middlewares);
+    this.useMiddlewares(beforeMiddlewares);
     this.useRouters(routers);
+    !!afterMiddlewares && this.useMiddlewares(afterMiddlewares);
   }
 
   private useMiddlewares(middlewares: ReadonlyArray<Middleware>) {

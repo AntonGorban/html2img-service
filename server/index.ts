@@ -2,6 +2,7 @@ require("dotenv").config();
 import fse from "fs-extra";
 
 import { App } from "./src/Classes/Server/App";
+import { ErrorHandlingMiddleware } from "./src/Middlewares/ErrorHandlingMiddleware";
 import { FileUploadMiddleware } from "./src/Middlewares/FileUploadMiddleware";
 import { paths } from "./src/other/config";
 import { mainRouter } from "./src/routes/router";
@@ -19,7 +20,8 @@ const app = new App(
       tempFileDir: paths.tmp,
     }),
   ],
-  [mainRouter]
+  [mainRouter],
+  [new ErrorHandlingMiddleware()]
 );
 
 app.start();

@@ -8,15 +8,7 @@ export class FileUploadMiddleware extends Middleware {
     super();
   }
 
-  protected _controller: Server.ControllerType<
-    Server.ParamsType,
-    Server.QueryType,
-    Server.BodyType,
-    any
-  > = fileUpload(this._config) as Server.ControllerType<
-    Server.ParamsType,
-    Server.QueryType,
-    Server.BodyType,
-    any
-  >;
+  protected _controller: Server.ControllerType = fileUpload(
+    this._config
+  ) as Server.ControllerType;
 }

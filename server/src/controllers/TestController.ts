@@ -1,11 +1,13 @@
 import { Server } from "../../types";
+import { ApiError } from "../Classes/Error/ApiError";
 import { Controller } from "../Classes/Server/Controller";
 
 export class TestController extends Controller<Params, Query, Body, Response> {
-  _controller: ControllerType = async (req, res) => {
+  _controller: ControllerType = async (req, res, next) => {
     try {
       const { test } = req.query;
 
+      return next(ApiError.notFound());
       return res
         .status(202)
         .json({
@@ -14,8 +16,7 @@ export class TestController extends Controller<Params, Query, Body, Response> {
         })
         .end();
     } catch (error) {
-      console.error(error);
-      return res.status(500).json({ test: "test", status: 500 });
+      return next(error);
     }
   };
 }

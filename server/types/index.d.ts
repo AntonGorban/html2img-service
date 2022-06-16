@@ -1,7 +1,7 @@
 import Express from "express";
 import ExpressCore from "express-serve-static-core";
 
-import { ObjectWithGivenValues } from "../../types/index";
+import { ObjectWithGivenValues } from "./utils";
 
 export namespace Server {
   interface ParamsType extends ExpressCore.ParamsDictionary {
@@ -31,4 +31,6 @@ export namespace Server {
     response: Express.Response<R>,
     next: Express.NextFunction
   ) => Promise<Express.Response<R> | ReturnType<Express.NextFunction>>;
+
+  type ExpressRouterType = ExpressCore.Express;
 }

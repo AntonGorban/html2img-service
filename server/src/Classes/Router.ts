@@ -1,10 +1,10 @@
 import Express from "express";
-import ExpressCore from "express-serve-static-core";
 
+import { Server } from "../../types";
 import { Endpoint } from "./Endpoint";
 
 export class Router {
-  private readonly _router: ExpressCore.Express;
+  private readonly _router: Server.ExpressRouterType;
 
   constructor(
     private readonly _route: string,

@@ -1,7 +1,5 @@
-import ExpressCore from "express-serve-static-core";
-
-import { ApiMethods } from "../../../types";
 import { Server } from "../../types";
+import { ApiMethods } from "../../types/enums";
 import { Controller } from "./Controller";
 import { Middleware } from "./Middleware";
 
@@ -18,7 +16,7 @@ export class Endpoint<
     private readonly _controller: Controller<P, Q, B, R>
   ) {}
 
-  public use(router: ExpressCore.Express) {
+  public use(router: Server.ExpressRouterType) {
     router[this._method](
       this._route,
       ...this._middlewares.map((middleware) => middleware.controller),

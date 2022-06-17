@@ -7,57 +7,70 @@ import { ScreenshotTask } from "./ScreenshotTask";
 
 export class Browser {
   protected _browser: Puppeteer.Browser | undefined;
-  protected _page: Puppeteer.Page | undefined;
 
   constructor() {
-    this._launchBrowser().then(this._createPage);
+    this._launchBrowser();
   }
 
   private readonly _launchBrowser = async () => {
     this._browser = await Puppeteer.launch();
+    console.log("Browser opened");
   };
 
-  private readonly _createPage = async () => {
+  public readonly closeBrowser = () =>
+    new Promise((resolve) => {
+      if (!!this._browser) this._browser.close().then(() => resolve(true));
+      else resolve(true);
+    });
+
+  // TODO: сделать единую страницу, с работай с ней по очереди
+  private readonly _createPage = () => {
     if (!this._browser) throw new BrowserError("browser is not running");
 
-    this._page = await this._browser.newPage();
+    return this._browser.newPage();
   };
 
-  private readonly calcNativeHeight = async (height: number) => {
-    if (!this._page) throw new BrowserError("page not created");
-
-    const rootElement = await this._page.$(`#${BrowserUtils.htmlRootId}`);
-    return (
-      rootElement
-        ?.boxModel()
-        .then(
-          (box) =>
-            lo.max([
-              ...(box?.margin.map(({ y }) => y) || []),
-              box?.height || height,
-            ]) || height
-        ) || height
-    );
-  };
+  private readonly calcNativeHeight = async (
+    page: Puppeteer.Page,
+    height: number
+  ) =>
+    page
+      .$(`#${BrowserUtils.htmlRootId}`)
+      .then(
+        (rootElement) =>
+          rootElement
+            ?.boxModel()
+            .then(
+              (box) =>
+                lo.max([
+                  ...(box?.margin.map(({ y }) => y) || []),
+                  box?.height || height,
+                ]) || height
+            ) || height
+      );
 
   public readonly screenshot = async (task: ScreenshotTask) => {
-    if (!this._page) throw new BrowserError("page not created");
     try {
+      const page = await this._createPage();
+
       const viewport = BrowserUtils.generateViewport({
         width: task.opts.width,
         height: task.opts.height,
       });
 
-      await this._page.setViewport(viewport);
+      await page.setViewport(viewport);
 
-      await this._page.setContent(BrowserUtils.generateContent(task.data));
+      await page.setContent(BrowserUtils.generateContent(task.data));
 
       const width = task.opts.width || viewport.width;
       const height =
         task.opts.height ||
-        (await this.calcNativeHeight(task.opts.height || viewport.height));
+        (await this.calcNativeHeight(
+          page,
+          task.opts.height || viewport.height
+        ));
 
-      return this._page.screenshot({
+      const screenshot = await page.screenshot({
         type: task.opts.returnImgType,
         clip: { x: 0, y: 0, width, height },
         encoding: "binary",
@@ -67,6 +80,9 @@ export class Browser {
             ? task.opts.quality || 100
             : undefined,
       });
+
+      await page.close();
+      return screenshot;
     } catch (error) {
       console.error(error);
       if (error instanceof Error) throw new BrowserError(error.message);

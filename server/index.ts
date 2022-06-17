@@ -30,3 +30,29 @@ const app = new App(
 );
 
 app.start();
+
+/* ---------------------------- On Exit Handling ---------------------------- */
+
+let wasCleanedUp = false;
+
+const runBeforeExiting = (callback: Function) =>
+  ["exit", "SIGINT", "SIGUSR1", "SIGUSR2", "uncaughtException"].forEach(
+    (exitSignal) => {
+      process.on(exitSignal, async () => {
+        if (!wasCleanedUp) {
+          await callback();
+          wasCleanedUp = true;
+        }
+        process.exit();
+      });
+    }
+  );
+
+runBeforeExiting(() =>
+  browser
+    .closeBrowser()
+    ?.then(() => console.log("Browser closed"))
+    .then(() => console.log("App closed"))
+);
+
+/* --------------------------- / On Exit Handling --------------------------- */

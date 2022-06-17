@@ -25,9 +25,11 @@ export class Html2imgController extends Controller<
       const { width, height } = this._queryValidator.validate(req.query);
       const { html, css } = this._bodyValidator.validate(req.body);
 
-      const img = await this._browser.screenshot(
-        new ScreenshotTask({ html, css }, { width, height, returnImgType })
+      const screenshotTask = new ScreenshotTask(
+        { html, css },
+        { width, height, returnImgType }
       );
+      const img = await this._browser.screenshot(screenshotTask);
 
       return res.end(img);
     } catch (error) {

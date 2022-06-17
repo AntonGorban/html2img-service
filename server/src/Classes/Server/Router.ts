@@ -3,19 +3,19 @@ import Express from "express";
 import { Server } from "../../../types";
 import { Endpoint } from "./Endpoint";
 
-export class Router {
+export abstract class Router {
   private readonly _router: Server.ExpressRouterType;
   private readonly _route: string;
 
-  constructor(route: string, endpoints: ReadonlyArray<Endpoint>) {
+  protected abstract readonly _endpoints: ReadonlyArray<Endpoint>;
+
+  constructor(route: string) {
     this._route = route;
     this._router = Express();
-
-    this.useEndpoints(endpoints);
   }
 
-  private useEndpoints(endpoints: ReadonlyArray<Endpoint>) {
-    endpoints.forEach((endpoint) => endpoint.use(this._router));
+  protected useEndpoints() {
+    this._endpoints.forEach((endpoint) => endpoint.use(this._router));
   }
 
   get route() {

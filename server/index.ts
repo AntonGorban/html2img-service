@@ -1,11 +1,12 @@
 require("dotenv").config();
 import fse from "fs-extra";
 
+import { Browser } from "./src/Classes/Browser/Browser";
 import { App } from "./src/Classes/Server/App";
 import { ErrorHandlingMiddleware } from "./src/Middlewares/ErrorHandlingMiddleware";
 import { FileUploadMiddleware } from "./src/Middlewares/FileUploadMiddleware";
 import { paths } from "./src/other/config";
-import { mainRouter } from "./src/routes/router";
+import { MainRouter } from "./src/routes/router";
 
 fse.ensureDir(paths.tmp);
 
@@ -20,7 +21,7 @@ const app = new App(
       tempFileDir: paths.tmp,
     }),
   ],
-  [mainRouter],
+  [new MainRouter(new Browser())],
   [new ErrorHandlingMiddleware()]
 );
 

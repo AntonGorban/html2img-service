@@ -28,7 +28,7 @@ export class Html2imgController extends Controller<
 
       const imgs = new ImageList(req.files || {});
 
-      const screenshotTask = new ScreenshotTask(data, {
+      const screenshotTask = new ScreenshotTask(data, imgs, {
         ...opts,
         returnImgType,
       });

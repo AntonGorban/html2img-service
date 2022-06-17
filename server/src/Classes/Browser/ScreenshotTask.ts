@@ -1,4 +1,5 @@
 import { ImgType } from "../../../types";
+import { ImageList } from "../ImageList";
 
 export class ScreenshotTask {
   constructor(
@@ -6,6 +7,7 @@ export class ScreenshotTask {
       readonly html: string;
       readonly css?: string;
     },
+    public readonly imgs: ImageList,
     public readonly opts: {
       readonly width?: number;
       readonly height?: number;

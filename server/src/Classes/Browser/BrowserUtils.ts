@@ -1,4 +1,5 @@
 import Puppeteer from "puppeteer";
+import { ImageList } from "../ImageList";
 
 export class BrowserUtils {
   static readonly generateViewport: GenerateViewport = ({ width, height }) => ({
@@ -12,7 +13,17 @@ export class BrowserUtils {
 
   static readonly htmlRootId = "Puppeteer-root";
 
-  static readonly generateContent: GenerateContent = ({ html, css, size }) => `
+  static readonly insertImgIntoHTML = (html: string, imgs: ImageList) => {
+    let outputHtml = html;
+
+    imgs.imgs.forEach(({ name, img }) => {
+      outputHtml = outputHtml.replace(new RegExp(name, "g"), img.uri);
+    });
+
+    return outputHtml;
+  };
+
+  static readonly generateContent: GenerateContent = ({ html, css, imgs }) => `
 	<!DOCTYPE html>
 	<html lang="en">
 	<head>
@@ -24,10 +35,6 @@ export class BrowserUtils {
 				margin: 0;
 				padding: 0;
 			}
-			div#${this.htmlRootId} {
-				${!!size?.width ? `width: ${size?.width};` : ""}
-				${!!size?.height ? `height: ${size?.height};` : ""}
-			}
 			div#${this.htmlRootId}::after {
 				content: "";
 				clear: both;
@@ -38,7 +45,7 @@ export class BrowserUtils {
 	</head>
 	<body>
 		<div id="${this.htmlRootId}">
-			${html}
+			${BrowserUtils.insertImgIntoHTML(html, imgs)}
 		</div>
 	</body>
 	</html>
@@ -52,11 +59,7 @@ interface GenerateViewport {
 }
 
 interface GenerateContent {
-  (opts: {
-    html: string;
-    css?: string;
-    size?: { width?: number; height?: number };
-  }): string;
+  (opts: { html: string; imgs: ImageList; css?: string }): string;
 }
 
 /* --------------------------------- / Types -------------------------------- */

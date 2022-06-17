@@ -60,7 +60,9 @@ export class Browser {
 
       await page.setViewport(viewport);
 
-      await page.setContent(BrowserUtils.generateContent(task.data));
+      await page.setContent(
+        BrowserUtils.generateContent({ ...task.data, imgs: task.imgs })
+      );
 
       const width = task.opts.width || viewport.width;
       const height =

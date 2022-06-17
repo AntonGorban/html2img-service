@@ -4,7 +4,6 @@ import { Endpoint } from "../Classes/Server/Endpoint";
 import { Router } from "../Classes/Server/Router";
 import { Validation } from "../Classes/Validation/Validation";
 import { Html2imgController } from "../controllers/Html2imgController";
-import { TestController } from "../controllers/TestController";
 
 export class MainRouter extends Router {
   constructor(
@@ -17,13 +16,6 @@ export class MainRouter extends Router {
   }
 
   protected _endpoints: readonly Endpoint[] = [
-    new Endpoint(
-      ApiMethods.GET,
-      "/test",
-      [],
-      new TestController(this._validation)
-    ),
-
     new Endpoint(
       ApiMethods.POST,
       "/:returnImgType",

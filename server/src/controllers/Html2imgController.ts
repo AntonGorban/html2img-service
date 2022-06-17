@@ -3,7 +3,7 @@ import { JSONSchemaType } from "ajv";
 import { ImgType, Server } from "../../types";
 import { Browser } from "../Classes/Browser/Browser";
 import { ScreenshotTask } from "../Classes/Browser/ScreenshotTask";
-import { ImageManager } from "../Classes/ImageManager";
+import { ImageList } from "../Classes/ImageList";
 import { Controller } from "../Classes/Server/Controller";
 import { Validation } from "../Classes/Validation/Validation";
 
@@ -15,8 +15,7 @@ export class Html2imgController extends Controller<
 > {
   constructor(
     private readonly _browser: Browser,
-    private readonly _validation: Validation,
-    private readonly _imageManager: ImageManager
+    private readonly _validation: Validation
   ) {
     super();
   }
@@ -27,7 +26,7 @@ export class Html2imgController extends Controller<
       const opts = this._queryValidator.validate(req.query);
       const data = this._bodyValidator.validate(req.body);
 
-      const imgs = !!req.files ? this._imageManager.prepareImgs(req.files) : [];
+      const imgs = new ImageList(req.files || {});
 
       const screenshotTask = new ScreenshotTask(data, {
         ...opts,
@@ -36,7 +35,7 @@ export class Html2imgController extends Controller<
       const returnImg = await this._browser.screenshot(screenshotTask);
 
       // * side effect
-      this._imageManager.removeImgs(imgs.map(({ img }) => img));
+      imgs.removeImgs();
 
       return res.end(returnImg);
     } catch (error) {

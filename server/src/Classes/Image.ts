@@ -1,21 +1,15 @@
 import { UploadedFile } from "express-fileupload";
 import fse from "fs-extra";
-import path from "path";
-import { v4 as uuidv4 } from "uuid";
 
-import { paths, PORT } from "../other/config";
+import { ImageUtils } from "./ImageUtils";
 
 export class Image {
   private readonly _name: string;
   private readonly _path: string;
 
-  constructor(
-    imgMimetypeToExtension: (mimetype: string) => string,
-    private readonly _file: UploadedFile
-  ) {
-    this._name = `${uuidv4()}.${imgMimetypeToExtension(this._file.mimetype)}`;
-
-    this._path = path.resolve(paths.static.img, this._name);
+  constructor(private readonly _file: UploadedFile) {
+    this._name = ImageUtils.generateName(this._file.mimetype);
+    this._path = ImageUtils.generatePath(this._name);
   }
 
   public readonly move = () => {
@@ -31,6 +25,6 @@ export class Image {
   };
 
   get uri() {
-    return `http://localhost:${PORT}/img/${this._name}`;
+    return ImageUtils.generateUri(this._name);
   }
 }

@@ -2,7 +2,6 @@ require("dotenv").config();
 import fse from "fs-extra";
 
 import { Browser } from "./src/Classes/Browser/Browser";
-import { ImageManager } from "./src/Classes/ImageManager";
 import { App } from "./src/Classes/Server/App";
 import { Validation } from "./src/Classes/Validation/Validation";
 import { ErrorHandlingMiddleware } from "./src/Middlewares/ErrorHandlingMiddleware";
@@ -17,7 +16,6 @@ fse.ensureDir(paths.static.img);
 
 const browser = new Browser();
 const validation = new Validation();
-const imageManager = new ImageManager();
 
 const app = new App(
   PORT,
@@ -29,7 +27,7 @@ const app = new App(
       tempFileDir: paths.tmp,
     }),
   ],
-  [new MainRouter(browser, validation, imageManager)],
+  [new MainRouter(browser, validation)],
   [new ErrorHandlingMiddleware(validation)]
 );
 

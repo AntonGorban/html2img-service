@@ -2,6 +2,7 @@ import express from "express";
 
 import { Server } from "../../types";
 import { ApiError } from "../Classes/Error/ApiError";
+import { BrowserError } from "../Classes/Error/BrowserError";
 import { ValidationError } from "../Classes/Error/ValidationError";
 import { Middleware } from "../Classes/Server/Middleware";
 
@@ -19,6 +20,10 @@ const errorHandlingMiddleware = (
   }
 
   if (error instanceof ValidationError) {
+    return res.status(400).json({ status: 400, message: error.message }).end();
+  }
+
+  if (error instanceof BrowserError) {
     return res.status(400).json({ status: 400, message: error.message }).end();
   }
 

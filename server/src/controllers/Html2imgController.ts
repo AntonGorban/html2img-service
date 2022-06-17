@@ -1,6 +1,8 @@
 import { JSONSchemaType } from "ajv";
 
-import { Server } from "../../types";
+import { ImgType, Server } from "../../types";
+import { Browser } from "../Classes/Browser/Browser";
+import { ScreenshotTask } from "../Classes/Browser/ScreenshotTask";
 import { Controller } from "../Classes/Server/Controller";
 import { validation } from "../Classes/Validation/Validation";
 
@@ -10,17 +12,21 @@ export class Html2imgController extends Controller<
   Body,
   Response
 > {
+  constructor(private readonly _browser: Browser) {
+    super();
+  }
+
   _controller: ControllerType = async (req, res, next) => {
     try {
-      const params = this._paramsValidator.validate(req.params);
-      const query = this._queryValidator.validate(req.query);
-      const body = this._bodyValidator.validate(req.body);
+      const { returnImgType } = this._paramsValidator.validate(req.params);
+      const { width, height } = this._queryValidator.validate(req.query);
+      const { html, css } = this._bodyValidator.validate(req.body);
 
-      return res.json({
-        params,
-        query,
-        body,
-      });
+      const img = await this._browser.screenshot(
+        new ScreenshotTask({ html, css }, { width, height, returnImgType })
+      );
+
+      return res.end(img);
     } catch (error) {
       return next(error);
     }
@@ -48,7 +54,7 @@ const paramsVS: JSONSchemaType<Params> = {
   type: "object",
 
   properties: {
-    returnImgType: { type: "string" },
+    returnImgType: { type: "string", enum: ["png", "jpeg", "webp"] },
   },
 
   required: ["returnImgType"],
@@ -79,7 +85,7 @@ const bodyVS: JSONSchemaType<Body> = {
 /* ---------------------------------- Types --------------------------------- */
 
 interface Params {
-  readonly returnImgType: string;
+  readonly returnImgType: ImgType;
 }
 
 interface Query {

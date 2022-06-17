@@ -29,3 +29,5 @@ export namespace Server {
 
   type ExpressRouterType = ExpressCore.Express;
 }
+
+export type ImgType = "png" | "jpeg" | "webp";

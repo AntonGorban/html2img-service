@@ -1,4 +1,5 @@
 import { ApiMethods } from "../../types/enums";
+import { Browser } from "../Classes/Browser/Browser";
 import { Endpoint } from "../Classes/Server/Endpoint";
 import { Router } from "../Classes/Server/Router";
 import { Html2imgController } from "../controllers/Html2imgController";
@@ -11,6 +12,6 @@ export const mainRouter = new Router("/", [
     ApiMethods.POST,
     "/:returnImgType",
     [],
-    new Html2imgController()
+    new Html2imgController(new Browser())
   ),
 ]);

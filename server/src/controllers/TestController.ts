@@ -3,9 +3,13 @@ import { JSONSchemaType } from "ajv";
 import { Server } from "../../types";
 import { ApiError } from "../Classes/Error/ApiError";
 import { Controller } from "../Classes/Server/Controller";
-import { validation } from "../Classes/Validation/Validation";
+import { Validation } from "../Classes/Validation/Validation";
 
 export class TestController extends Controller<Params, Query, Body, Response> {
+  constructor(private readonly _validation: Validation) {
+    super();
+  }
+
   _controller: ControllerType = async (req, res, next) => {
     try {
       const { test } = this._queryValidator.validate(req.query);
@@ -22,7 +26,8 @@ export class TestController extends Controller<Params, Query, Body, Response> {
     }
   };
 
-  private readonly _queryValidator = validation.generateValidator(queryVS);
+  private readonly _queryValidator =
+    this._validation.generateValidator(queryVS);
 }
 
 /* ------------------------------- Validation ------------------------------- */

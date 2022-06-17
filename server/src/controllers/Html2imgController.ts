@@ -4,7 +4,7 @@ import { ImgType, Server } from "../../types";
 import { Browser } from "../Classes/Browser/Browser";
 import { ScreenshotTask } from "../Classes/Browser/ScreenshotTask";
 import { Controller } from "../Classes/Server/Controller";
-import { validation } from "../Classes/Validation/Validation";
+import { Validation } from "../Classes/Validation/Validation";
 
 export class Html2imgController extends Controller<
   Params,
@@ -12,7 +12,10 @@ export class Html2imgController extends Controller<
   Body,
   Response
 > {
-  constructor(private readonly _browser: Browser) {
+  constructor(
+    private readonly _browser: Browser,
+    private readonly _validation: Validation
+  ) {
     super();
   }
 
@@ -32,17 +35,17 @@ export class Html2imgController extends Controller<
     }
   };
 
-  private readonly _paramsValidator = validation.generateValidator(
+  private readonly _paramsValidator = this._validation.generateValidator(
     paramsVS,
     "params"
   );
 
-  private readonly _queryValidator = validation.generateValidator(
+  private readonly _queryValidator = this._validation.generateValidator(
     queryVS,
     "query"
   );
 
-  private readonly _bodyValidator = validation.generateValidator(
+  private readonly _bodyValidator = this._validation.generateValidator(
     bodyVS,
     "body"
   );

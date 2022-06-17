@@ -4,7 +4,7 @@ import ajvFormats from "ajv-formats";
 
 import { Validator } from "./Validator";
 
-class Validation {
+export class Validation {
   private readonly _ajv: Ajv;
 
   constructor() {
@@ -45,5 +45,3 @@ class Validation {
     return this._ajv.errorsText(errors, { dataVar });
   }
 }
-
-export const validation = new Validation();

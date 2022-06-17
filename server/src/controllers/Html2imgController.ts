@@ -77,6 +77,8 @@ const queryVS: JSONSchemaType<Query> = {
   properties: {
     width: { type: "integer", nullable: true, default: 1024 },
     height: { type: "integer", nullable: true },
+    quality: { type: "integer", nullable: true, minimum: 1, maximum: 100 },
+    omitBackground: { type: "boolean", nullable: true },
   },
 };
 
@@ -102,6 +104,8 @@ interface Params {
 interface Query {
   readonly width?: number;
   readonly height?: number;
+  readonly quality?: number;
+  readonly omitBackground?: boolean;
 }
 
 interface Body {

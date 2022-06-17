@@ -13,6 +13,7 @@ export class ScreenshotTask {
       readonly height?: number;
       readonly returnImgType: ImgType;
       readonly quality?: number;
+      readonly omitBackground?: boolean;
     }
   ) {}
 }

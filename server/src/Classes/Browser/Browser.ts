@@ -76,7 +76,7 @@ export class Browser {
         type: task.opts.returnImgType,
         clip: { x: 0, y: 0, width, height },
         encoding: "binary",
-        omitBackground: false,
+        omitBackground: task.opts.omitBackground || false,
         quality:
           task.opts.returnImgType !== "png"
             ? task.opts.quality || 100

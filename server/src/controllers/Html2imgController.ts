@@ -3,6 +3,7 @@ import { JSONSchemaType } from "ajv";
 import { ImgType, Server } from "../../types";
 import { Browser } from "../Classes/Browser/Browser";
 import { ScreenshotTask } from "../Classes/Browser/ScreenshotTask";
+import { ImageManager } from "../Classes/ImageManager";
 import { Controller } from "../Classes/Server/Controller";
 import { Validation } from "../Classes/Validation/Validation";
 
@@ -14,7 +15,8 @@ export class Html2imgController extends Controller<
 > {
   constructor(
     private readonly _browser: Browser,
-    private readonly _validation: Validation
+    private readonly _validation: Validation,
+    private readonly _imageManager: ImageManager
   ) {
     super();
   }
@@ -22,16 +24,21 @@ export class Html2imgController extends Controller<
   _controller: ControllerType = async (req, res, next) => {
     try {
       const { returnImgType } = this._paramsValidator.validate(req.params);
-      const { width, height } = this._queryValidator.validate(req.query);
-      const { html, css } = this._bodyValidator.validate(req.body);
+      const opts = this._queryValidator.validate(req.query);
+      const data = this._bodyValidator.validate(req.body);
 
-      const screenshotTask = new ScreenshotTask(
-        { html, css },
-        { width, height, returnImgType }
-      );
-      const img = await this._browser.screenshot(screenshotTask);
+      const imgs = !!req.files ? this._imageManager.prepareImgs(req.files) : [];
 
-      return res.end(img);
+      const screenshotTask = new ScreenshotTask(data, {
+        ...opts,
+        returnImgType,
+      });
+      const returnImg = await this._browser.screenshot(screenshotTask);
+
+      // * side effect
+      this._imageManager.removeImgs(imgs.map(({ img }) => img));
+
+      return res.end(returnImg);
     } catch (error) {
       return next(error);
     }

@@ -2,30 +2,34 @@ require("dotenv").config();
 import fse from "fs-extra";
 
 import { Browser } from "./src/Classes/Browser/Browser";
+import { ImageManager } from "./src/Classes/ImageManager";
 import { App } from "./src/Classes/Server/App";
 import { Validation } from "./src/Classes/Validation/Validation";
 import { ErrorHandlingMiddleware } from "./src/Middlewares/ErrorHandlingMiddleware";
 import { FileUploadMiddleware } from "./src/Middlewares/FileUploadMiddleware";
-import { paths } from "./src/other/config";
+import { StaticMiddleware } from "./src/Middlewares/StaticMiddleware";
+import { paths, PORT } from "./src/other/config";
 import { MainRouter } from "./src/routes/router";
 
 fse.ensureDir(paths.tmp);
-
-const PORT = Number(process.env.PORT) || 5000;
+fse.ensureDir(paths.static.root);
+fse.ensureDir(paths.static.img);
 
 const browser = new Browser();
 const validation = new Validation();
+const imageManager = new ImageManager();
 
 const app = new App(
   PORT,
   [
+    new StaticMiddleware(paths.static.root),
     new FileUploadMiddleware({
       limits: { fileSize: 20971520 },
       useTempFiles: true,
       tempFileDir: paths.tmp,
     }),
   ],
-  [new MainRouter(browser, validation)],
+  [new MainRouter(browser, validation, imageManager)],
   [new ErrorHandlingMiddleware(validation)]
 );
 

@@ -3,7 +3,7 @@ import { JSONSchemaType } from "ajv";
 import { ImgType, Server } from "../../types";
 import { Browser } from "../Classes/Browser/Browser";
 import { ScreenshotTask } from "../Classes/Browser/ScreenshotTask";
-import { ImageList } from "../Classes/ImageList";
+import { ImageList } from "../Classes/Image/ImageList";
 import { Controller } from "../Classes/Server/Controller";
 import { Validation } from "../Classes/Validation/Validation";
 

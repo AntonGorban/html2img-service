@@ -1,5 +1,6 @@
 import Puppeteer from "puppeteer";
-import { ImageList } from "../ImageList";
+
+import { ImageList } from "../Image/ImageList";
 
 export class BrowserUtils {
   static readonly generateViewport: GenerateViewport = ({ width, height }) => ({

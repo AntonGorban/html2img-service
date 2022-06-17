@@ -1,5 +1,5 @@
 import { ImgType } from "../../../types";
-import { ImageList } from "../ImageList";
+import { ImageList } from "../Image/ImageList";
 
 export class ScreenshotTask {
   constructor(

@@ -1,8 +1,8 @@
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
 
-import { paths, PORT } from "../other/config";
-import { ApiError } from "./Error/ApiError";
+import { paths, PORT } from "../../other/config";
+import { ApiError } from "../Error/ApiError";
 
 export class ImageUtils {
   private static readonly imgMimetypeToExtension = (mimetype: string) => {
